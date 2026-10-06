@@ -7,27 +7,33 @@ on:
     branches: [main]
 
 jobs:
-  playwright:
-    name: "Playwright Tests"
+  test:
     runs-on: ubuntu-latest
-
-    container:
-      image: mcr.microsoft.com/playwright/python:v1.55.0-noble
-      options: --user 1001
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v4
 
       - name: Set up Python
-        uses: actions/setup-python@v6
+        uses: actions/setup-python@v5
         with:
           python-version: "3.13"
 
+      - name: Upgrade pip
+        run: python -m pip install --upgrade pip
+
       - name: Install dependencies
         run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
+          python -m pip install -r requirement.txt
 
-      - name: Run Playwright tests
+      - name: Verify pytest installation
+        run: |
+          python -m pip show pytest
+          python -m pytest --version
+
+      - name: Install Playwright browsers
+        run: |
+          python -m playwright install --with-deps chromium
+
+      - name: Run pytest
         run: python -m pytest

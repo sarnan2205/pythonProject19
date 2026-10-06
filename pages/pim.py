@@ -15,7 +15,10 @@ class PIM:
         self.driver_license_number=page.locator(
             "body > div:nth-child(3) > div:nth-child(1) > div:nth-child(2) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > form:nth-child(3) > div:nth-child(3) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > input:nth-child(1)")
         self.licence_expire_date=page.get_by_placeholder("yyyy-dd-mm").nth(0)
+        self.nationality_dropdown = page.locator(".oxd-select-text-input").first
+        self.radio_button_male = page.locator(".oxd-radio-wrapper").first
         self.button_save=page.locator("button").filter(has_text="Save").first
+
 
     def navigate_to_pim(self):
         try:
@@ -32,6 +35,7 @@ class PIM:
             self.lastname.fill(last_name)
             self.employee_id.fill(employee_id)
             self.save.click()
+            self.page.wait_for_url("**/pim/viewPersonalDetails/empNumber/**", timeout=10000)
             print("Employee added successfully.")
             expect(self.personal_details_text).to_be_visible()
         except Exception as e:
@@ -39,10 +43,13 @@ class PIM:
             self.page.screenshot(path="screenshots/add_employee_error.png")
             raise # Capture screenshot on error
 
-    def personal_details(self, driver_license_number, license_expire_date):
+    def personal_details(self, driver_license_number, license_expire_date, nationality="Albanian"):
         try:
          self.driver_license_number.fill(driver_license_number)
          self.licence_expire_date.fill(license_expire_date)
+         self.nationality_dropdown.click()
+         self.page.locator(".oxd-select-dropdown .oxd-select-option").filter(has_text=nationality).click()
+         self.radio_button_male.click()
          self.button_save.click()
         except Exception as e:
             print("Exception occurred while filling personal details:", str(e))

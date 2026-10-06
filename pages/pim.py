@@ -14,7 +14,11 @@ class PIM:
         #self.driver_license_number=page.get_by_label("Driver's License Number")
         self.driver_license_number=page.locator(
             "body > div:nth-child(3) > div:nth-child(1) > div:nth-child(2) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > form:nth-child(3) > div:nth-child(3) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > input:nth-child(1)")
-        self.licence_expire_date=page.get_by_placeholder("yyyy-dd-mm").nth(0)
+        self.licence_expire_date = page.locator(
+            "div.oxd-input-group"
+        ).filter(
+            has=page.get_by_text("License Expiry Date", exact=True)
+        ).locator("input")
         self.nationality_dropdown = page.locator(".oxd-select-text-input").first
         self.radio_button_male = page.locator(".oxd-radio-wrapper").first
         self.button_save=page.locator("button").filter(has_text="Save").first

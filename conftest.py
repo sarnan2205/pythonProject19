@@ -1,8 +1,6 @@
 import json
 from pathlib import Path
 
-
-import pytest
 import pytest
 
 
@@ -18,47 +16,3 @@ def load_login_data():
 @pytest.fixture(params=load_login_data())
 def login_data(request):
     return request.param
-
-
-def pytest_addoption(parser):
-    parser.addoption(
-        "--mybrowser",
-        action="append",
-        default=["chromium"],
-        help="Browser to run tests on"
-    )
-
-
-@pytest.fixture(scope="session")
-def browser(playwright, request):
-
-    browser_names = request.config.getoption("--mybrowser")
-
-    for browser_name in browser_names:
-
-     if browser_name == "chromium":
-        browser = playwright.chromium.launch(headless=True)
-
-     elif browser_name == "firefox":
-        browser = playwright.firefox.launch(headless=True)
-
-     elif browser_name == "webkit":
-        browser = playwright.webkit.launch(headless=True)
-
-     else:
-        raise ValueError(f"Unsupported browser: {browser_name}")
-
-    yield browser
-
-    browser.close()
-
-
-@pytest.fixture
-def page(browser):
-
-    context = browser.new_context()
-    page = context.new_page()
-
-    yield page
-
-    context.close()

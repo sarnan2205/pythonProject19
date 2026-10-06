@@ -12,7 +12,9 @@ class LoginPage():
 
     def navigate(self):
         self.page.goto(
-            "https://opensource-demo.orangehrmlive.com/web/index.php/auth/login"
+            "https://opensource-demo.orangehrmlive.com/web/index.php/auth/login",
+            wait_until="domcontentloaded",
+            timeout=60000
         )
 
     def do_login(self, username, password):

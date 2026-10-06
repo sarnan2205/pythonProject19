@@ -37,13 +37,13 @@ def browser(playwright, request):
     for browser_name in browser_names:
 
      if browser_name == "chromium":
-        browser = playwright.chromium.launch(headless=False)
+        browser = playwright.chromium.launch(headless=True)
 
      elif browser_name == "firefox":
-        browser = playwright.firefox.launch(headless=False)
+        browser = playwright.firefox.launch(headless=True)
 
      elif browser_name == "webkit":
-        browser = playwright.webkit.launch(headless=False)
+        browser = playwright.webkit.launch(headless=True)
 
      else:
         raise ValueError(f"Unsupported browser: {browser_name}")
